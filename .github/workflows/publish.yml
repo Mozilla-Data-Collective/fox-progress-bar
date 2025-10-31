@@ -13,7 +13,6 @@ jobs:
     environment: pypi
     permissions:
       contents: read
-      id-token: write
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repository
