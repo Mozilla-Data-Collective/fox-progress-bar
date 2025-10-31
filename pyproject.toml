@@ -1,0 +1,26 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "fox-progress-bar"
+version = "0.1.0"
+description = "A tiny terminal progress bar with a fox emoji."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { file = "LICENSE" }
+authors = [
+  { name = "Mozilla Data Collective"}
+]
+keywords = ["progress", "progressbar", "terminal", "emoji", "cli", "fox"]
+
+[project.urls]
+Homepage = "https://github.com/Mozilla-Data-Collective/fox-progress-bar"
+Repository = "https://github.com/Mozilla-Data-Collective/fox-progress-bar"
+Issues = "https://github.com/Mozilla-Data-Collective/fox-progress-bar/issues"
+
+[project.scripts]
+fox-progress-demo = "fox_progress_bar.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/fox_progress_bar"]
