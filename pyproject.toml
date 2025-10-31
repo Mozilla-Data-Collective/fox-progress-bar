@@ -22,5 +22,5 @@ Issues = "https://github.com/Mozilla-Data-Collective/fox-progress-bar/issues"
 [project.scripts]
 fox-progress-demo = "fox_progress_bar.cli:main"
 
-[tool.hatch.build.targets.wheel]
-packages = ["src/fox_progress_bar"]
+[tool.setuptools.packages.find]
+where = ["src"]
