@@ -26,13 +26,6 @@ class ProgressBar:
     def _display(self) -> None:
         """Render the progress bar to stdout."""
         if self.total_size <= 0:
-            # If we don't know the total size, show a spinning fox
-            spinner = ["🦊", "🦊", "🦊", "🦊"]
-            spin_char = spinner[int(time.time() * 2) % len(spinner)]
-            sys.stdout.write(
-                f"\r{spin_char} Downloading... {self._format_bytes(self.downloaded)}"
-            )
-            sys.stdout.flush()
             return
 
         # Calculate percentage and bar position
@@ -72,10 +65,10 @@ class ProgressBar:
 
     def finish(self) -> None:
         """Complete the progress bar and move to the next line."""
+        elapsed_time = time.time() - self.start_time
         if self.total_size > 0:
             # Show completed bar with fox at the end
             bar = "█" * (self.bar_length - 1) + "🦊"
-            elapsed_time = time.time() - self.start_time
             avg_speed = self.downloaded / elapsed_time if elapsed_time > 0 else 0
             sys.stdout.write(
                 f"\r{bar} 100.0% "
@@ -84,7 +77,6 @@ class ProgressBar:
                 f"Total time: {self._format_time(elapsed_time)}\n"
             )
         else:
-            elapsed_time = time.time() - self.start_time
             avg_speed = self.downloaded / elapsed_time if elapsed_time > 0 else 0
             sys.stdout.write(
                 f"\n🦊 Download complete! {self._format_bytes(self.downloaded)} "
