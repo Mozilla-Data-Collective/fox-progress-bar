@@ -102,6 +102,7 @@ class ProgressBar:
             if value < 1024.0 or unit == units[-1]:
                 return f"{value:.1f} {unit}"
             value /= 1024.0
+        return ""
 
     @staticmethod
     def _format_time(seconds: float) -> str:
