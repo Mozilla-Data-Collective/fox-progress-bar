@@ -34,7 +34,7 @@ pb.finish()
 
 ## Releasing (GitHub + PyPI)
 
-Everytime you create a GitHub Release (use a tag like v0.1.0), GitHub Actions will automatically build and publish the package to PyPI.
+Everytime you create a GitHub Release (use a tag like v0.1.0), GitHub Actions will automatically build and publish the package to PyPI. Make sure to bump `version` in `pyproject.toml` accordingly for each release. If needed, you can also trigger a release manually from the "Actions" tab in GitHub to bypass the version check (not recommended).
 
 
 ## Tests
