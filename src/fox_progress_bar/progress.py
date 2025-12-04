@@ -5,13 +5,14 @@ import time
 class ProgressBar:
     """A custom progress bar with a fox emoji that moves across the bar."""
 
-    def __init__(self, total_size: int, bar_length: int = 50, unit: str | None = "B") -> None:
+    def __init__(self, total_size: int, bar_length: int = 50, unit: str | None = "B", indicator: str = "🦊") -> None:
         """
         Args:
             total_size (int): Total size of the download/process.
             bar_length (int): Length of the progress bar in characters.
             unit (str | None): Unit to display. If None, no unit is shown.
                 If "B", bytes formatting is used and scaled accordingly to KB, MB, etc.
+            indicator (str): The emoji to use as the progress indicator.
         """
         self.total_size = total_size
         self.downloaded = 0
@@ -20,6 +21,7 @@ class ProgressBar:
         self.last_update_time = 0.0
         self.update_interval = 0.1  # seconds
         self.unit = unit
+        self.indicator = indicator
 
     def update(self, chunk_size: int) -> None:
         """Update the progress bar with new downloaded data"""
@@ -46,11 +48,11 @@ class ProgressBar:
         # Position the fox emoji - always visible at position 0 or current progress
         if filled_length == 0:
             # Fox at the start when no progress yet
-            bar = "🦊" + bar[1:]
+            bar = self.indicator + bar[1:]
         else:
             # Fox at the leading edge of progress
             fox_position = min(filled_length, self.bar_length - 1)
-            bar = bar[:fox_position] + "🦊" + bar[fox_position + 1 :]
+            bar = bar[:fox_position] + self.indicator + bar[fox_position + 1:]
 
         # Calculate speed and ETA
         elapsed_time = time.time() - self.start_time
@@ -75,7 +77,7 @@ class ProgressBar:
         elapsed_time = time.time() - self.start_time
         if self.total_size > 0:
             # Show completed bar with fox at the end
-            bar = "█" * (self.bar_length - 1) + "🦊"
+            bar = "█" * (self.bar_length - 1) + self.indicator
             avg_speed = self.downloaded / elapsed_time if elapsed_time > 0 else 0
             sys.stdout.write(
                 f"\r{bar} 100.0% "
@@ -87,7 +89,7 @@ class ProgressBar:
             avg_speed = self.downloaded / elapsed_time if elapsed_time > 0 else 0
             unit_suffix = "" if self.unit is None else f" {self.unit}"
             sys.stdout.write(
-                f"\n🦊 Process complete! {self.downloaded:.1f}{unit_suffix} "
+                f"\n{self.indicator} Process complete! {self.downloaded:.1f}{unit_suffix} "
                 f"in {self._format_time(elapsed_time)} "
                 f"(avg: {self._format_value(avg_speed)}/s)\n"
             )
