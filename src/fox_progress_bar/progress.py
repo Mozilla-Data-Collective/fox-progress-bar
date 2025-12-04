@@ -79,8 +79,8 @@ class ProgressBar:
             avg_speed = self.downloaded / elapsed_time if elapsed_time > 0 else 0
             sys.stdout.write(
                 f"\r{bar} 100.0% "
-                f"({self._format_bytes(self.downloaded)}/{self._format_bytes(self.total_size)}) "
-                f"Average: {self._format_bytes(avg_speed)}/s "
+                f"({self._format_value(self.downloaded)}/{self._format_value(self.total_size)}) "
+                f"Average: {self._format_value(avg_speed)}/s "
                 f"Total time: {self._format_time(elapsed_time)}\n"
             )
         else:
