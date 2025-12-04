@@ -5,13 +5,21 @@ import time
 class ProgressBar:
     """A custom progress bar with a fox emoji that moves across the bar."""
 
-    def __init__(self, total_size: int, bar_length: int = 50) -> None:
+    def __init__(self, total_size: int, bar_length: int = 50, unit: str | None = "B") -> None:
+        """
+        Args:
+            total_size (int): Total size of the download/process.
+            bar_length (int): Length of the progress bar in characters.
+            unit (str | None): Unit to display. If None, no unit is shown.
+                If "B", bytes formatting is used and scaled accordingly to KB, MB, etc.
+        """
         self.total_size = total_size
         self.downloaded = 0
         self.bar_length = bar_length
         self.start_time = time.time()
         self.last_update_time = 0.0
         self.update_interval = 0.1  # seconds
+        self.unit = unit
 
     def update(self, chunk_size: int) -> None:
         """Update the progress bar with new downloaded data"""
@@ -49,16 +57,15 @@ class ProgressBar:
         if elapsed_time > 0 and self.downloaded > 0:
             speed = self.downloaded / elapsed_time
             eta = (self.total_size - self.downloaded) / speed if speed > 0 else 0
-            speed_str = f"{self._format_bytes(speed)}/s"
+            speed_str = f"{self._format_value(speed)}/s"
             eta_str = f"ETA: {self._format_time(eta)}"
         else:
-            speed_str = "0.0 B/s"
+            speed_str = "0.0" if self.unit is None else f"0.0 {self.unit}/s"
             eta_str = "ETA: --:--"
 
-        # Display the progress bar
         sys.stdout.write(
             f"\r{bar} {percentage:.1f}% "
-            f"({self._format_bytes(self.downloaded)}/{self._format_bytes(self.total_size)}) "
+            f"({self._format_value(self.downloaded)}/{self._format_value(self.total_size)}) "
             f"{speed_str} {eta_str}"
         )
         sys.stdout.flush()
@@ -78,12 +85,21 @@ class ProgressBar:
             )
         else:
             avg_speed = self.downloaded / elapsed_time if elapsed_time > 0 else 0
+            unit_suffix = "" if self.unit is None else f" {self.unit}"
             sys.stdout.write(
-                f"\n🦊 Download complete! {self._format_bytes(self.downloaded)} "
+                f"\n🦊 Process complete! {self.downloaded:.1f}{unit_suffix} "
                 f"in {self._format_time(elapsed_time)} "
-                f"(avg: {self._format_bytes(avg_speed)}/s)\n"
+                f"(avg: {self._format_value(avg_speed)}/s)\n"
             )
         sys.stdout.flush()
+
+    def _format_value(self, value: float) -> str:
+        """Format current value with or without unit."""
+        if self.unit is None:
+            return f"{value:.1f}"
+        if self.unit == "B":
+            return self._format_bytes(value)
+        return f"{value:.1f} {self.unit}"
 
     @staticmethod
     def _format_bytes(bytes_val: float) -> str:
