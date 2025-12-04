@@ -24,12 +24,19 @@ from fox_progress_bar import ProgressBar
 import time
 
 total = 5_000_000
+chunk_size = total // 100
 pb = ProgressBar(total_size=total)
 for _ in range(100):
-    pb.update(total // 100)
+    pb.update(chunk_size)
     time.sleep(0.03)
 pb.finish()
 ```
+
+> [!TIP]
+> You can define your own unit of measurement to display through the `unit` parameter of `ProgressBar`. E.g.
+> ```python
+> pb = ProgressBar(total_size=total, unit="foxes")
+> ```
 
 
 ## Releasing (GitHub + PyPI)
