@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fox-progress-bar"
-version = "v0.1.1"
+version = "v0.1.2"
 description = "A tiny terminal progress bar with a fox emoji."
 readme = "README.md"
 requires-python = ">=3.8"
