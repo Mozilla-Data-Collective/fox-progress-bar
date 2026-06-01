@@ -116,8 +116,18 @@ class ProgressBar:
 
     @staticmethod
     def _format_time(seconds: float) -> str:
-        """Format seconds into MM:SS."""
+        """Format seconds into MM:SS, HH:MM:SS, or DD:HH:MM:SS depending on duration."""
         if seconds < 0:
             return "--:--"
-        mins, secs = divmod(int(seconds), 60)
-        return f"{mins:02d}:{secs:02d}"
+        total_seconds = int(seconds)
+        secs = total_seconds % 60
+        total_minutes = total_seconds // 60
+        mins = total_minutes % 60
+        total_hours = total_minutes // 60
+        if total_hours == 0:
+            return f"{mins:02d}:{secs:02d}"
+        hours = total_hours % 24
+        days = total_hours // 24
+        if days == 0:
+            return f"{hours:02d}:{mins:02d}:{secs:02d}"
+        return f"{days:02d}:{hours:02d}:{mins:02d}:{secs:02d}"
